@@ -35,7 +35,25 @@
       document.body.classList.toggle("menu-open", open);
       toggle.setAttribute("aria-expanded", open ? "true" : "false");
       toggle.setAttribute("aria-label", open ? "Close menu" : "Open menu");
+      if (open) {
+        var full = nav.scrollHeight;
+        nav.style.maxHeight = full > 0 ? full + "px" : "";
+      } else {
+        nav.style.maxHeight = nav.getBoundingClientRect().height + "px";
+        window.requestAnimationFrame(function () {
+          nav.style.maxHeight = "0px";
+        });
+      }
     }
+
+    window.matchMedia("(min-width: 1100px)").addEventListener("change", function (event) {
+      if (!event.matches) return;
+      header.classList.remove("is-open");
+      document.body.classList.remove("menu-open");
+      toggle.setAttribute("aria-expanded", "false");
+      toggle.setAttribute("aria-label", "Open menu");
+      nav.style.maxHeight = "";
+    });
 
     toggle.addEventListener("click", function () {
       setOpen(!header.classList.contains("is-open"));
